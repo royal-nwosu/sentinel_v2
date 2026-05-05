@@ -116,26 +116,23 @@ document.addEventListener('DOMContentLoaded', () => {
         suffixInput.addEventListener('input', updateEventId);
 
         // Sync main type field with prefix
-        const disasterTypeInput = document.getElementById('f-type');
-        if (disasterTypeInput) {
+        const disasterTypeSelect = document.getElementById('f-type');
+        if (disasterTypeSelect && prefixSelect) {
             const typeToPrefix = {
-                'Earthquake': 'EQ',
-                'Hurricane': 'HU',
-                'Wildfire': 'WF',
-                'Flood': 'FL',
-                'Tornado': 'TO',
+                Earthquake: 'EQ',
+                Hurricane: 'HU',
+                Wildfire: 'WF',
+                Flood: 'FL',
+                Tornado: 'TO',
                 'Volcanic Eruption': 'VO',
-                'Blizzard': 'BL',
-                'Drought': 'DR'
+                Blizzard: 'BL',
+                Drought: 'DR'
             };
 
-            disasterTypeInput.addEventListener('input', () => {
-                const val = disasterTypeInput.value.trim();
-                const mappedPrefix = typeToPrefix[val];
-                if (mappedPrefix) {
-                    prefixSelect.value = mappedPrefix;
-                    updateEventId();
-                }
+            disasterTypeSelect.addEventListener('change', () => {
+                const mappedPrefix = typeToPrefix[disasterTypeSelect.value] || '';
+                prefixSelect.value = mappedPrefix;
+                updateEventId();
             });
         }
 

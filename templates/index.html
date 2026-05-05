@@ -304,8 +304,18 @@
                         <input type="text" id="f-name" required>
                     </div>
                     <div class="input-group">
-                        <label>Type</label>
-                        <input type="text" id="f-type" required>
+                        <label for="f-type">Type</label>
+                        <select id="f-type" name="type" required>
+                            <option value="">Select a disaster type...</option>
+                            <option value="Earthquake">Earthquake</option>
+                            <option value="Hurricane">Hurricane</option>
+                            <option value="Wildfire">Wildfire</option>
+                            <option value="Flood">Flood</option>
+                            <option value="Tornado">Tornado</option>
+                            <option value="Volcanic Eruption">Volcanic Eruption</option>
+                            <option value="Blizzard">Blizzard</option>
+                            <option value="Drought">Drought</option>
+                        </select>
                     </div>
                     <div class="input-group">
                         <label>Region (Time Zone)</label>

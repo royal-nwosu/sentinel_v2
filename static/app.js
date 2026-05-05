@@ -74,6 +74,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('add-btn').addEventListener('click', () => {
         document.getElementById('record-form').reset();
         document.getElementById('f-id').readOnly = false;
+        document.getElementById('event-type-prefix').disabled = false;
+        document.getElementById('event-id-suffix').readOnly = false;
+        document.getElementById('event-id-preview-text').textContent = '—';
         document.getElementById('modal-title').textContent = 'Add Disaster';
         modal.classList.add('active');
     });
@@ -81,6 +84,65 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('cancel-btn').addEventListener('click', () => {
         modal.classList.remove('active');
     });
+
+    function setupEventIdBuilder() {
+        const prefixSelect = document.getElementById('event-type-prefix');
+        const suffixInput  = document.getElementById('event-id-suffix');
+        const hiddenIdInput = document.getElementById('f-id');
+        const previewText   = document.getElementById('event-id-preview-text');
+
+        if (!prefixSelect || !suffixInput || !hiddenIdInput || !previewText) return;
+
+        const updateEventId = () => {
+            const prefix = prefixSelect.value.trim();
+            const suffix = suffixInput.value
+                .toUpperCase()
+                .replace(/[^A-Z0-9]/g, '')
+                .trim();
+
+            suffixInput.value = suffix;
+
+            if (prefix && suffix) {
+                const finalId = `${prefix}${suffix}`;
+                hiddenIdInput.value = finalId;
+                previewText.textContent = finalId;
+            } else {
+                hiddenIdInput.value = '';
+                previewText.textContent = '—';
+            }
+        };
+
+        prefixSelect.addEventListener('change', updateEventId);
+        suffixInput.addEventListener('input', updateEventId);
+
+        // Sync main type field with prefix
+        const disasterTypeInput = document.getElementById('f-type');
+        if (disasterTypeInput) {
+            const typeToPrefix = {
+                'Earthquake': 'EQ',
+                'Hurricane': 'HU',
+                'Wildfire': 'WF',
+                'Flood': 'FL',
+                'Tornado': 'TO',
+                'Volcanic Eruption': 'VO',
+                'Blizzard': 'BL',
+                'Drought': 'DR'
+            };
+
+            disasterTypeInput.addEventListener('input', () => {
+                const val = disasterTypeInput.value.trim();
+                const mappedPrefix = typeToPrefix[val];
+                if (mappedPrefix) {
+                    prefixSelect.value = mappedPrefix;
+                    updateEventId();
+                }
+            });
+        }
+
+        updateEventId();
+    }
+
+    setupEventIdBuilder();
 
     // Search
     document.getElementById('search-input').addEventListener('input', (e) => {
@@ -465,8 +527,28 @@ document.addEventListener('DOMContentLoaded', () => {
         const record = dataList.find(d => d.event_id === id);
         if (!record) return;
 
+        // Split ID into prefix and suffix
+        const prefixes = ['EQ','HU','WF','FL','TO','VO','BL','DR'];
+        let prefix = '';
+        let suffix = id;
+
+        for (const p of prefixes) {
+            if (id.startsWith(p)) {
+                prefix = p;
+                suffix = id.substring(p.length);
+                break;
+            }
+        }
+
+        document.getElementById('event-type-prefix').value = prefix;
+        document.getElementById('event-id-suffix').value = suffix;
+        document.getElementById('event-id-preview-text').textContent = id;
+
         document.getElementById('f-id').value      = record.event_id;
         document.getElementById('f-id').readOnly   = true;
+        document.getElementById('event-type-prefix').disabled = true;
+        document.getElementById('event-id-suffix').readOnly = true;
+
         document.getElementById('f-name').value    = record.name;
         document.getElementById('f-type').value    = record.type;
         document.getElementById('f-region').value  = record.region;

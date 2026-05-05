@@ -273,9 +273,31 @@
             <h2 id="modal-title">Add Disaster</h2>
             <form id="record-form">
                 <div class="form-grid">
-                    <div class="input-group">
-                        <label>Event ID</label>
-                        <input type="text" id="f-id" required>
+                    <div class="input-group full-width">
+                        <label for="event-type-prefix">Event ID</label>
+                        <div class="event-id-row">
+                            <select id="event-type-prefix" name="event_type_prefix" required>
+                                <option value="">Select type...</option>
+                                <option value="EQ">Earthquake</option>
+                                <option value="HU">Hurricane</option>
+                                <option value="WF">Wildfire</option>
+                                <option value="FL">Flood</option>
+                                <option value="TO">Tornado</option>
+                                <option value="VO">Volcanic Eruption</option>
+                                <option value="BL">Blizzard</option>
+                                <option value="DR">Drought</option>
+                            </select>
+                            <input
+                                type="text"
+                                id="event-id-suffix"
+                                name="event_id_suffix"
+                                placeholder="Number (e.g. 001)"
+                                maxlength="10"
+                                required
+                            />
+                        </div>
+                        <input type="hidden" id="f-id" name="event_id" />
+                        <small class="event-id-preview">Generated ID: <span id="event-id-preview-text">—</span></small>
                     </div>
                     <div class="input-group">
                         <label>Name</label>

@@ -528,3 +528,31 @@ th {
   .records-tools-right { width: 100%; }
   .btn { width: 100%; }
 }
+.event-id-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.event-id-preview {
+  display: block;
+  margin-top: 8px;
+  color: #8ea2c7;
+  font-size: 0.85rem;
+}
+
+#event-id-preview-text {
+  color: #dce9ff;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.full-width {
+  grid-column: span 2;
+}
+
+@media (max-width: 640px) {
+  .event-id-row {
+    grid-template-columns: 1fr;
+  }
+}

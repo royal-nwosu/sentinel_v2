@@ -29,7 +29,7 @@
         #sentinel-text {
             position: absolute;
             font-family: 'Poiret One', sans-serif;
-            font-size: 108px;
+            font-size: clamp(48px, 10vw, 108px);
             font-weight: 400;
             letter-spacing: 0.05em;
             color: rgba(200, 240, 220, 0.93);
@@ -39,15 +39,77 @@
             user-select: none;
             pointer-events: none;
             z-index: 5;
-            top: 10%;
+            top: 8%;
             left: 50%;
             transform: translateX(-50%);
             white-space: nowrap;
         }
         #login-view .glass-card.login-card {
             position: relative;
-            z-index: 3;
-            margin-top: 60px;
+            z-index: 10;
+            margin-top: 40px;
+            width: min(420px, 92vw);
+            padding: 32px;
+            border-radius: 24px;
+            background: rgba(10, 24, 46, 0.65);
+            backdrop-filter: blur(22px);
+            border: 1px solid rgba(109, 143, 201, 0.2);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+        }
+        .auth-sub {
+            margin: 0 0 20px;
+            color: #8ea2c7;
+            font-size: 0.85rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            text-align: center;
+        }
+        .auth-form {
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .auth-form.active {
+            display: flex;
+        }
+        .auth-switch {
+            margin: 16px 0 0;
+            text-align: center;
+            color: #8ea2c7;
+            font-size: 0.9rem;
+        }
+        .auth-switch button {
+            background: none;
+            border: none;
+            color: var(--blue-2);
+            font-weight: 600;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 4px;
+            font-family: inherit;
+        }
+        .auth-switch button:hover {
+            text-decoration: underline;
+        }
+        .auth-msg {
+            margin-bottom: 20px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            display: none;
+            text-align: center;
+        }
+        .auth-msg.success {
+            display: block;
+            background: rgba(37, 209, 138, 0.15);
+            border: 1px solid rgba(37, 209, 138, 0.25);
+            color: #90e0b2;
+        }
+        .auth-msg.error {
+            display: block;
+            background: rgba(255, 91, 115, 0.15);
+            border: 1px solid rgba(255, 91, 115, 0.25);
+            color: #ff9cad;
         }
         #cloud-canvas {
             position: absolute;
@@ -64,19 +126,44 @@
     <div id="login-view" class="view active">
         <canvas id="planet-canvas"></canvas>
         <span id="sentinel-text">SENTINEL</span>
-        <div class="glass-card login-card">
-            <form id="login-form">
-                <div class="input-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" required>
-                </div>
-                <div class="input-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" required>
-                </div>
-                <button type="submit" class="btn-primary">Access</button>
-                <div id="login-error" class="error-msg"></div>
-            </form>
+        <div class="glass-card login-card" id="auth-card">
+            <div class="auth-header">
+                <p class="auth-sub">Monitoring Critical Events</p>
+            </div>
+
+            <div id="auth-msg" class="auth-msg"></div>
+
+            <div class="auth-panels">
+                <form id="login-form" class="auth-form active">
+                    <div class="input-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Access System</button>
+                    <p class="auth-switch">Need Access? <button type="button" id="show-register">Create Account</button></p>
+                </form>
+
+                <form id="register-form" class="auth-form">
+                    <div class="input-group">
+                        <label for="reg-username">Username</label>
+                        <input type="text" id="reg-username" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="reg-password">Password</label>
+                        <input type="password" id="reg-password" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="reg-confirm">Confirm Password</label>
+                        <input type="password" id="reg-confirm" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Create Account</button>
+                    <p class="auth-switch">Already have access? <button type="button" id="show-login">Back to Login</button></p>
+                </form>
+            </div>
         </div>
         <canvas id="cloud-canvas"></canvas>
     </div>

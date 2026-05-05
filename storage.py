@@ -18,6 +18,22 @@ def load_users():
         data = json.load(f)
         return [User(u['username'], u['password']) for u in data]
 
+def save_users(users):
+    ensure_data_dir()
+    data = [{'username': u.username, 'password': u.password} for u in users]
+    with open(USERS_FILE, 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=2)
+
+def register_user(username, password):
+    users = load_users()
+    if any(u.username.lower() == username.lower() for u in users):
+        return False, "Username already exists."
+    
+    from models import User
+    users.append(User(username, password))
+    save_users(users)
+    return True, "Success"
+
 def load_disasters():
     ensure_data_dir()
     if not os.path.exists(DISASTERS_FILE):

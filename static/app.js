@@ -18,12 +18,36 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+    // Auth form toggles
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const showRegister = document.getElementById('show-register');
+    const showLogin = document.getElementById('show-login');
+    const authMsg = document.getElementById('auth-msg');
+
+    function setAuthMsg(msg, isError = true) {
+        authMsg.textContent = msg;
+        authMsg.className = `auth-msg ${isError ? 'error' : 'success'}`;
+        authMsg.style.display = 'block';
+    }
+
+    showRegister.addEventListener('click', () => {
+        loginForm.classList.remove('active');
+        registerForm.classList.add('active');
+        authMsg.style.display = 'none';
+    });
+
+    showLogin.addEventListener('click', () => {
+        registerForm.classList.remove('active');
+        loginForm.classList.add('active');
+        authMsg.style.display = 'none';
+    });
+
     // Login Form
-    document.getElementById('login-form').addEventListener('submit', async (e) => {
+    loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
-        const errorMsg = document.getElementById('login-error');
 
         try {
             const res = await fetch('/api/login', {
@@ -34,13 +58,43 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await res.json();
 
             if (data.success) {
-                errorMsg.textContent = '';
+                authMsg.style.display = 'none';
                 showDashboard();
             } else {
-                errorMsg.textContent = data.message || 'Login failed';
+                setAuthMsg(data.message || 'Login failed');
             }
         } catch (err) {
-            errorMsg.textContent = 'Server error';
+            setAuthMsg('Server error');
+        }
+    });
+
+    // Register Form
+    registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('reg-username').value;
+        const password = document.getElementById('reg-password').value;
+        const confirm  = document.getElementById('reg-confirm').value;
+
+        try {
+            const res = await fetch('/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password, confirm })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                setAuthMsg(data.message, false);
+                // Switch back to login
+                setTimeout(() => {
+                    registerForm.classList.remove('active');
+                    loginForm.classList.add('active');
+                }, 1500);
+            } else {
+                setAuthMsg(data.message || 'Registration failed');
+            }
+        } catch (err) {
+            setAuthMsg('Server error');
         }
     });
 

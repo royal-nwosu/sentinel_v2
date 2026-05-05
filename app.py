@@ -12,6 +12,25 @@ manager = SystemManager()
 def index():
     return render_template('index.html')
 
+@app.route('/api/register', methods=['POST'])
+def register():
+    data = request.get_json()
+    username = data.get('username', '').strip()
+    password = data.get('password', '').strip()
+    confirm  = data.get('confirm', '').strip()
+
+    if not username or not password or not confirm:
+        return jsonify({'success': False, 'message': 'All fields are required'}), 400
+    
+    if password != confirm:
+        return jsonify({'success': False, 'message': 'Passwords do not match'}), 400
+
+    from storage import register_user
+    success, msg = register_user(username, password)
+    if success:
+        return jsonify({'success': True, 'message': 'Account created! Please login.'})
+    return jsonify({'success': False, 'message': msg}), 400
+
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.get_json()

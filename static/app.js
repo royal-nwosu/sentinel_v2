@@ -12,11 +12,20 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(r => r.json())
         .then(data => {
             if (data.logged_in) {
+                setCurrentUser(data.username);
                 showDashboard();
             } else {
                 showLogin();
             }
         });
+
+    function setCurrentUser(username) {
+        const name = username || 'User';
+        const displayName = document.getElementById('user-display-name');
+        const avatar = document.getElementById('user-avatar');
+        if (displayName) displayName.textContent = name;
+        if (avatar) avatar.textContent = name.charAt(0).toUpperCase();
+    }
 
     // Auth form toggles
     const loginForm = document.getElementById('login-form');
@@ -59,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (data.success) {
                 authMsg.style.display = 'none';
+                setCurrentUser(data.username);
                 showDashboard();
             } else {
                 setAuthMsg(data.message || 'Login failed');

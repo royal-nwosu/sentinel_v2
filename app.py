@@ -38,7 +38,8 @@ def login():
     password = data.get('password')
     if authenticate(username, password):
         session['logged_in'] = True
-        return jsonify({'success': True})
+        session['username'] = username
+        return jsonify({'success': True, 'username': username})
     return jsonify({'success': False, 'message': 'Invalid credentials'}), 401
 
 @app.route('/api/logout', methods=['POST'])
@@ -48,7 +49,10 @@ def logout():
 
 @app.route('/api/check_auth', methods=['GET'])
 def check_auth():
-    return jsonify({'logged_in': session.get('logged_in', False)})
+    return jsonify({
+        'logged_in': session.get('logged_in', False),
+        'username': session.get('username', '')
+    })
 
 @app.route('/api/dashboard', methods=['GET'])
 def get_dashboard():

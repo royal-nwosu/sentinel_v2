@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Auth form toggles
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
-    const showRegister = document.getElementById('show-register');
-    const showLogin = document.getElementById('show-login');
+    const toRegisterBtn = document.getElementById('show-register');
+    const toLoginBtn = document.getElementById('show-login');
     const authMsg = document.getElementById('auth-msg');
 
     function setAuthMsg(msg, isError = true) {
@@ -31,13 +31,13 @@ document.addEventListener('DOMContentLoaded', () => {
         authMsg.style.display = 'block';
     }
 
-    showRegister.addEventListener('click', () => {
+    toRegisterBtn.addEventListener('click', () => {
         loginForm.classList.remove('active');
         registerForm.classList.add('active');
         authMsg.style.display = 'none';
     });
 
-    showLogin.addEventListener('click', () => {
+    toLoginBtn.addEventListener('click', () => {
         registerForm.classList.remove('active');
         loginForm.classList.add('active');
         authMsg.style.display = 'none';
